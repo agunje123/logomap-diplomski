@@ -3,13 +3,13 @@
     <span class="material-symbols-outlined"> escalator_warning </span>
     <span class="title">Logomap</span>
     <span>
-      <button mat-icon-button>
+      <button mat-icon-button [routerLink]="['/map']">
         <mat-icon>map</mat-icon>
       </button>
-      <button mat-icon-button>
+      <button mat-icon-button [routerLink]="['/table']">
         <mat-icon>format_list_bulleted</mat-icon>
       </button>
     </span>
   </div>
 </mat-toolbar>
-<app-map></app-map>
+<router-outlet></router-outlet>

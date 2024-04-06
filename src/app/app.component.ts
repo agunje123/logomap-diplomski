@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { MapComponent } from './components/map/map.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterModule,
     MapComponent,
     MatToolbarModule,
     MatButtonModule,
