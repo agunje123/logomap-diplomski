@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapService } from '../../services/map.service';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { Kabinet } from '../../model/kabinet';
+import { DialogComponent } from '../dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
@@ -22,11 +27,11 @@ export class MapComponent implements OnInit {
         'https://unpkg.com/leaflet@1.5.1/dist/images/marker-shadow.png',
     }),
   };
-  private chosenLocation: any = [];
+  chosenLocation: any = [];
   latitude: number = 0;
   longitude: number = 0;
 
-  constructor(private mapService: MapService) {}
+  constructor(private mapService: MapService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.initMap();
@@ -90,5 +95,17 @@ export class MapComponent implements OnInit {
     } else {
       console.log('Please select a location.');
     }
+  }
+
+  openDialog() {
+    let kabinet: Kabinet = {
+      latitude: this.latitude,
+      longitude: this.longitude,
+    };
+    this.dialog.open(DialogComponent, {
+      data: {
+        kabinet,
+      },
+    });
   }
 }
