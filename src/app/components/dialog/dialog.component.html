@@ -1,5 +1,30 @@
-<div class="container">
-    <form [formGroup]="kabinetForm">
-        nešto
-    </form>
+<div mat-dialog-content>
+  <form [formGroup]="kabinetForm" (ngSubmit)="onSubmit()">
+    <div class="grid-container">
+      <mat-form-field class="grid-item">
+        <mat-label>Ime Kabineta</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field class="grid-item">
+        <mat-label>Adresa</mat-label>
+        <input matInput formControlName="address" />
+      </mat-form-field>
+      <mat-form-field class="grid-item">
+        <mat-label>E-pošta</mat-label>
+        <input matInput formControlName="email" />
+      </mat-form-field>
+      <mat-form-field class="grid-item">
+        <mat-label>Web-stranica</mat-label>
+        <input matInput formControlName="website" />
+      </mat-form-field>
+    </div>
+    <div class="buttons">
+      <button mat-raised-button color="primary" (click)="onSubmit()">
+        Kreiraj kabinet
+      </button>
+      <button mat-raised-button color="warn" (click)="closeDialog()">
+        Odustani
+      </button>
+    </div>
+  </form>
 </div>
