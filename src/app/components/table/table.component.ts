@@ -13,7 +13,14 @@ import { Kabinet } from '../../model/kabinet';
 })
 export class TableComponent {
   dataSource = new MatTableDataSource<Kabinet>([]);
-  displayedColumns: string[] = ['id', 'name', 'actions'];
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'address',
+    'website',
+    'phoneNumber',
+    'actions',
+  ];
   data: Kabinet[] = [];
 
   onFileSelected(event: any) {
