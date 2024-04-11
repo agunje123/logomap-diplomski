@@ -21,4 +21,6 @@ export class TableComponent {
     { id: 1, name: 'Svasta' },
     { id: 2, name: 'Nesta' },
   ];
+
+  onFileSelected(e: Event) {}
 }

@@ -1,0 +1,14 @@
+.header {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+mat-header-cell,
+th {
+  background-color: #2e7d32 !important;
+  color: whitesmoke !important;
+  font-weight: bold;
+}
