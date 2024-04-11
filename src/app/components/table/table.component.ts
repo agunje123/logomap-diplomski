@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Kabinet } from '../../model/kabinet';
+import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-table',
@@ -12,6 +13,8 @@ import { Kabinet } from '../../model/kabinet';
   styleUrl: './table.component.scss',
 })
 export class TableComponent {
+  constructor(private supabaseService: SupabaseService) {}
+
   dataSource = new MatTableDataSource<Kabinet>([]);
   displayedColumns: string[] = [
     'id',
@@ -53,7 +56,7 @@ export class TableComponent {
         }
       }
       this.dataSource.data = this.data;
-      console.log(this.dataSource.data);
+      this.supabaseService.pushKabinetList(this.data);
     };
     reader.onerror = () => {
       console.error('Error reading CSV file');

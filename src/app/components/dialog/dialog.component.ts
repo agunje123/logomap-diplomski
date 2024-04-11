@@ -56,7 +56,6 @@ export class DialogComponent implements OnInit {
   }
 
   onSubmit() {
-    this.supabase.createKabinet();
     this.dialogRef.close();
   }
 }

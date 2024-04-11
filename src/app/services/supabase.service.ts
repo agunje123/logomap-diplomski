@@ -16,16 +16,16 @@ export class SupabaseService {
     );
   }
 
-  createKabinet(kabinetList: Kabinet[]) {
-    kabinetList.forEach((kabinet) => {
-      this.supabase.from('kabineti').insert({
+  async pushKabinetList(kabinetList: Kabinet[]) {
+    const insertData = kabinetList.map((kabinet) => {
+      return {
         name: kabinet.name,
         address: kabinet.address,
         website: kabinet.website,
         phone_number: kabinet.phoneNumber,
         geometry: `POINT(${kabinet.longitude} ${kabinet.latitude})`,
-      });
+      };
     });
+    return this.supabase.from('kabineti').insert(insertData).select();
   }
-
 }
