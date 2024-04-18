@@ -47,7 +47,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.supabaseService.kabinetListSub.subscribe({
         next: (kabineti) => {
           kabineti.forEach((kabinet) => {
-            this.createMarkerWithPopup(kabinet.longitude!, kabinet.latitude!); //TODO: Popraviti ovo!!! latitude i longitude ne funkcioniraju
+            this.createMarkerWithPopup(kabinet.latitude!, kabinet.longitude!);
           });
         },
       })
