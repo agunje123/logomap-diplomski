@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { MapService } from '../../services/map.service';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Kabinet } from '../../model/kabinet';
 import { DialogComponent } from '../dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SupabaseService } from '../../services/supabase.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -14,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
   private map!: L.Map;
   private centroid: L.LatLngExpression = [45.81, 15.98];
   private markerIcon = {
@@ -31,23 +33,43 @@ export class MapComponent implements OnInit {
   latitude: number = 0;
   longitude: number = 0;
 
-  constructor(private mapService: MapService, private dialog: MatDialog) {}
+  subs: Subscription = new Subscription();
 
-  ngOnInit() {
+  constructor(
+    private supabaseService: SupabaseService,
+    private mapService: MapService,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
     this.initMap();
+    this.subs.add(
+      this.supabaseService.kabinetListSub.subscribe({
+        next: (kabineti) => {
+          kabineti.forEach((kabinet) => {
+            this.createMarkerWithPopup(kabinet.longitude!, kabinet.latitude!); //TODO: Popraviti ovo!!! latitude i longitude ne funkcioniraju
+          });
+        },
+      })
+    );
+    this.supabaseService.getKabinetList();
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   initMap() {
     this.map = L.map('map', {
       center: this.centroid,
-      zoom: 14,
+      zoom: 13,
     });
 
     const tiles = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       {
         maxZoom: 18,
-        minZoom: 14,
+        minZoom: 12,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
