@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../environment';
 import { Kabinet } from '../model/kabinet';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
+  kabinetListSub = new Subject<Kabinet[]>();
+
   protected supabase: SupabaseClient;
 
   constructor() {
@@ -27,5 +30,14 @@ export class SupabaseService {
       };
     });
     return this.supabase.from('kabineti').insert(insertData).select();
+  }
+
+  async getKabinetList() {
+    let { data, error } = await this.supabase.rpc('getkabinetlist');
+    if (error) {
+      console.error(error);
+    } else {
+      this.kabinetListSub.next(data);
+    }
   }
 }
