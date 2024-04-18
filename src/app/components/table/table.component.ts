@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Kabinet } from '../../model/kabinet';
 import { SupabaseService } from '../../services/supabase.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-table',
@@ -12,8 +13,10 @@ import { SupabaseService } from '../../services/supabase.service';
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
-export class TableComponent {
+export class TableComponent implements OnInit, OnDestroy {
   constructor(private supabaseService: SupabaseService) {}
+
+  subs: Subscription = new Subscription();
 
   dataSource = new MatTableDataSource<Kabinet>([]);
   displayedColumns: string[] = [
@@ -21,10 +24,25 @@ export class TableComponent {
     'name',
     'address',
     'website',
-    'phoneNumber',
+    'phone_number',
     'actions',
   ];
   data: Kabinet[] = [];
+
+  ngOnInit(): void {
+    this.subs.add(
+      this.supabaseService.kabinetListSub.subscribe({
+        next: (kabineti) => {
+          this.dataSource.data = kabineti;
+        },
+      })
+    );
+    this.supabaseService.getKabinetList();
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -47,7 +65,7 @@ export class TableComponent {
           name: columns[1],
           address: columns[2],
           website: columns[3],
-          phoneNumber: columns[4],
+          phone_number: columns[4],
           longitude: parseFloat(columns[5]),
           latitude: parseFloat(columns[6]),
         };

@@ -3,7 +3,7 @@ export interface Kabinet {
     name?: string,
     address?: string,
     website?: string,
-    phoneNumber?: string,
+    phone_number?: string,
     longitude?: number,
     latitude?: number,
     geometry?: string

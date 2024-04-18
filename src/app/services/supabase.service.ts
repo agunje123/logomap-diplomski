@@ -25,7 +25,7 @@ export class SupabaseService {
         name: kabinet.name,
         address: kabinet.address,
         website: kabinet.website,
-        phone_number: kabinet.phoneNumber,
+        phone_number: kabinet.phone_number,
         geometry: `POINT(${kabinet.longitude} ${kabinet.latitude})`,
       };
     });
@@ -33,7 +33,7 @@ export class SupabaseService {
   }
 
   async getKabinetList() {
-    let { data, error } = await this.supabase.rpc('getkabinetlist');
+    let { data, error } = await this.supabase.rpc('get_kabinet_list');
     if (error) {
       console.error(error);
     } else {
