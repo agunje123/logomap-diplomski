@@ -5,16 +5,19 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Kabinet } from '../../model/kabinet';
 import { SupabaseService } from '../../services/supabase.service';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, MatButtonModule],
+  imports: [MatTableModule, MatIconModule, MatButtonModule, CommonModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit, OnDestroy {
   constructor(private supabaseService: SupabaseService) {}
+
+  displayCSV: boolean = true;
 
   subs: Subscription = new Subscription();
 
@@ -34,6 +37,7 @@ export class TableComponent implements OnInit, OnDestroy {
       this.supabaseService.kabinetListSub.subscribe({
         next: (kabineti) => {
           this.dataSource.data = kabineti;
+          this.displayCSV = false;
         },
       })
     );
