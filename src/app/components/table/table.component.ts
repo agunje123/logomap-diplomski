@@ -23,7 +23,6 @@ export class TableComponent implements OnInit, OnDestroy {
 
   dataSource = new MatTableDataSource<Kabinet>([]);
   displayedColumns: string[] = [
-    'id',
     'name',
     'address',
     'website',
@@ -36,8 +35,10 @@ export class TableComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.supabaseService.kabinetListSub.subscribe({
         next: (kabineti) => {
-          this.dataSource.data = kabineti;
-          this.displayCSV = false;
+          if (kabineti.length !== 0) {
+            this.dataSource.data = kabineti;
+            this.displayCSV = false;
+          }
         },
       })
     );
