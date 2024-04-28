@@ -12,3 +12,9 @@ th {
   color: whitesmoke !important;
   font-weight: bold;
 }
+
+tr:hover {
+  background-color: #2e7d323a;
+  transition: all 0.4s;
+  cursor: pointer;
+}
