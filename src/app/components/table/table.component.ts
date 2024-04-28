@@ -108,6 +108,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
   showKabinet(kabinet: Kabinet) {
     this.router.navigate(['map']);
-    this.mapService.showKabinet(kabinet);
+    setTimeout(() => {
+      this.mapService.showKabinet(kabinet);
+    }, 500);
   }
 }

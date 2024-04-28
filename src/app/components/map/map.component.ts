@@ -27,9 +27,6 @@ export class MapComponent implements OnInit, OnDestroy {
         'https://unpkg.com/leaflet@1.5.1/dist/images/marker-shadow.png',
     }),
   };
-  chosenLocation: any = [];
-  latitude: number = 0;
-  longitude: number = 0;
 
   subs: Subscription = new Subscription();
 
@@ -39,7 +36,6 @@ export class MapComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.initMap();
     this.subs.add(
       this.supabaseService.kabinetListSub.subscribe({
         next: (kabineti) => {
@@ -49,7 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
         },
       })
     );
-    this.supabaseService.getKabinetList();
+    this.initMap();
   }
 
   ngOnDestroy(): void {
@@ -57,6 +53,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   initMap() {
+    this.mapService.kabinetSub.subscribe({
+      next: (kabinet) => {
+        this.panToKabinet(kabinet);
+      },
+    });
+
     this.map = L.map('map', {
       center: this.centroid,
       zoom: 13,
@@ -73,6 +75,8 @@ export class MapComponent implements OnInit, OnDestroy {
     );
 
     tiles.addTo(this.map);
+
+    this.supabaseService.getKabinetList();
   }
 
   createMarkerWithPopup(kabinet: Kabinet) {
@@ -83,7 +87,6 @@ export class MapComponent implements OnInit, OnDestroy {
     let popup = this.createPopup(kabinet);
     marker.addTo(this.map);
     marker.bindPopup(popup);
-    this.chosenLocation.push(marker);
   }
 
   createPopup(kabinet: Kabinet) {
@@ -102,12 +105,7 @@ export class MapComponent implements OnInit, OnDestroy {
     return popupContent;
   }
 
-  setCoordinates() {
-    if (this.latitude != 0 && this.longitude != 0) {
-      this.mapService.isMapOpenSub.next(false);
-      this.mapService.setCoordinates(this.latitude, this.longitude);
-    } else {
-      console.log('Please select a location.');
-    }
+  panToKabinet(kabinet: Kabinet) {
+    this.map.panTo(new L.LatLng(kabinet.latitude!, kabinet.longitude!));
   }
 }
