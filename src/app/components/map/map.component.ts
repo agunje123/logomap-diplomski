@@ -3,9 +3,6 @@ import * as L from 'leaflet';
 import { MapService } from '../../services/map.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { Kabinet } from '../../model/kabinet';
-import { DialogComponent } from '../dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { SupabaseService } from '../../services/supabase.service';
 import { Subscription } from 'rxjs';
 
@@ -37,8 +34,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private supabaseService: SupabaseService,
-    private mapService: MapService,
-    private dialog: MatDialog
+    private mapService: MapService
   ) {}
 
   ngOnInit(): void {
@@ -76,13 +72,6 @@ export class MapComponent implements OnInit, OnDestroy {
     );
 
     tiles.addTo(this.map);
-
-    this.map.on('click', (e) => {
-      this.removePreviousMarkers();
-      this.createMarkerWithPopup(e.latlng.lat, e.latlng.lng);
-      this.latitude = e.latlng.lat;
-      this.longitude = e.latlng.lng;
-    });
   }
 
   createMarkerWithPopup(latitude: number, longitude: number) {
@@ -103,13 +92,6 @@ export class MapComponent implements OnInit, OnDestroy {
     );
   }
 
-  removePreviousMarkers() {
-    for (let marker of this.chosenLocation) {
-      this.map.removeLayer(marker);
-    }
-    this.chosenLocation = [];
-  }
-
   setCoordinates() {
     if (this.latitude != 0 && this.longitude != 0) {
       this.mapService.isMapOpenSub.next(false);
@@ -117,17 +99,5 @@ export class MapComponent implements OnInit, OnDestroy {
     } else {
       console.log('Please select a location.');
     }
-  }
-
-  openDialog() {
-    let kabinet: Kabinet = {
-      latitude: this.latitude,
-      longitude: this.longitude,
-    };
-    this.dialog.open(DialogComponent, {
-      data: {
-        kabinet,
-      },
-    });
   }
 }
