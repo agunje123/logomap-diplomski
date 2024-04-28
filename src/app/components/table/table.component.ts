@@ -27,7 +27,6 @@ export class TableComponent implements OnInit, OnDestroy {
     'address',
     'website',
     'phone_number',
-    'actions',
   ];
   data: Kabinet[] = [];
 
