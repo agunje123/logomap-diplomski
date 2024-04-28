@@ -6,6 +6,8 @@ import { Kabinet } from '../../model/kabinet';
 import { SupabaseService } from '../../services/supabase.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-table',
@@ -15,19 +17,18 @@ import { CommonModule } from '@angular/common';
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit, OnDestroy {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private mapService: MapService,
+    private router: Router
+  ) {}
 
   displayCSV: boolean = true;
 
   subs: Subscription = new Subscription();
 
   dataSource = new MatTableDataSource<Kabinet>([]);
-  displayedColumns: string[] = [
-    'name',
-    'address',
-    'website',
-    'phone_number',
-  ];
+  displayedColumns: string[] = ['name', 'address', 'website', 'phone_number'];
   data: Kabinet[] = [];
 
   ngOnInit(): void {
@@ -103,5 +104,10 @@ export class TableComponent implements OnInit, OnDestroy {
     }
     columns.push(currentColumn.trim());
     return columns;
+  }
+
+  showKabinet(kabinet: Kabinet) {
+    this.router.navigate(['map']);
+    this.mapService.showKabinet(kabinet);
   }
 }
