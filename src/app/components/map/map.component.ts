@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { SupabaseService } from '../../services/supabase.service';
 import { Subscription } from 'rxjs';
+import { Kabinet } from '../../model/kabinet';
 
 @Component({
   selector: 'app-map',
@@ -43,7 +44,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.supabaseService.kabinetListSub.subscribe({
         next: (kabineti) => {
           kabineti.forEach((kabinet) => {
-            this.createMarkerWithPopup(kabinet.latitude!, kabinet.longitude!);
+            this.createMarkerWithPopup(kabinet);
           });
         },
       })
@@ -74,22 +75,31 @@ export class MapComponent implements OnInit, OnDestroy {
     tiles.addTo(this.map);
   }
 
-  createMarkerWithPopup(latitude: number, longitude: number) {
-    let marker = L.marker([latitude, longitude], this.markerIcon);
-    let popup = this.createPopup(latitude, longitude);
+  createMarkerWithPopup(kabinet: Kabinet) {
+    let marker = L.marker(
+      [kabinet.latitude!, kabinet.longitude!],
+      this.markerIcon
+    );
+    let popup = this.createPopup(kabinet);
     marker.addTo(this.map);
     marker.bindPopup(popup);
     this.chosenLocation.push(marker);
   }
 
-  createPopup(latitude: number, longitude: number) {
-    let latitudeShort = latitude.toFixed(4);
-    let longitudeShort = longitude.toFixed(4);
-    return (
-      `Chosen location: ` +
-      `<div>Latitude: ${latitudeShort}</div>` +
-      `<div>Longitude: ${longitudeShort}</div>`
-    );
+  createPopup(kabinet: Kabinet) {
+    let popupContent =
+      `<div>Ime Kabineta: ${kabinet.name}</div>` +
+      `<div>Adresa: ${kabinet.address}</div>`;
+
+    if (kabinet.website) {
+      popupContent += `<div>Web-stranica: ${kabinet.website}</div>`;
+    }
+
+    if (kabinet.phone_number) {
+      popupContent += `<div>Kontakt broj: ${kabinet.phone_number}</div>`;
+    }
+
+    return popupContent;
   }
 
   setCoordinates() {
